@@ -119,3 +119,13 @@ foreach ($size in 16, 48, 128) {
     New-IconPng -Size $size -OutPath $out
     Write-Host "Gerado: $out"
 }
+
+# --- Store assets (logo 300x300 para Edge Add-ons / Chrome Web Store) -------
+$storeDir = Join-Path $PSScriptRoot "..\store-assets"
+if (-not (Test-Path -LiteralPath $storeDir)) {
+    New-Item -ItemType Directory -Path $storeDir -Force | Out-Null
+}
+$storeDir = (Resolve-Path -LiteralPath $storeDir)
+$storeLogo = Join-Path $storeDir "logo-300.png"
+New-IconPng -Size 300 -OutPath $storeLogo
+Write-Host "Gerado: $storeLogo"

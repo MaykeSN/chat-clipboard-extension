@@ -1,22 +1,34 @@
 # Chat Clipboard
 
-Extensão do Chrome (Manifest V3) que extrai mensagens de um chat de atendimento ao cliente da página atual, formata e copia para o clipboard.
+Extensão de navegador (Manifest V3, compatível com **Microsoft Edge** e Google Chrome) que extrai o histórico de mensagens de um chat de atendimento ao cliente, formata com data/hora e copia para a área de transferência.
+
+Pensada para a plataforma **PureCloud (Genesys Cloud) + HeadsCX/Blip** (`*.invenit.cloud`), mas adaptável a outras via ajuste dos seletores CSS.
+
+## Download
+
+Baixe o `.zip` mais recente na **[página de Releases](https://github.com/MaykeSN/chat-clipboard-extension/releases)** e siga o passo a passo de [Como instalar](#como-instalar-modo-desenvolvedor) abaixo.
 
 ## Funcionalidades
 
-- **Botão flutuante** fixo no canto inferior direito de qualquer página.
-- **Atalho de teclado** `Ctrl+Shift+C` (configurável em `chrome://extensions/shortcuts`).
-- **Clique no ícone** da extensão na barra do Chrome também copia.
-- Feedback visual: o botão muda para `Copiado!` (verde) por 2 segundos.
+- **Botão flutuante** fixo no canto inferior direito do painel do chat (gradiente roxo/azul, design moderno em pílula).
+- **Atalho de teclado** `Ctrl+Shift+C` (configurável em `edge://extensions/shortcuts`).
+- **Clique no ícone** da extensão na barra do navegador também copia.
+- **Feedback visual** instantâneo: botão muda para `Copiado!` (verde) por 2 s. Estado de erro também tem cor própria.
+- **Limpeza automática**: remove tags HTML literais (`<b>`, `<strong>`...) e markdown do WhatsApp (`*negrito*`, `_itálico_`, `~tachado~`) que vêm do bot.
+- **Datas padronizadas**: converte timestamps tipo `13 de mai. de 2026, 13:08` para `[13/05/2026 13:08]`.
 
 ## Formato de saída
 
 ```
-Cliente: Olá, preciso de ajuda com o pedido 1234.
-Atendente: Olá! Claro, vou verificar agora.
-Cliente: Obrigado.
-Atendente: Encontrei aqui, o pedido está em rota de entrega.
+[13/05/2026 13:08] Cliente: Olá, preciso de ajuda com o pedido 1234.
+[13/05/2026 13:08] Atendente: Olá! Claro, vou verificar agora.
+[13/05/2026 13:09] Cliente: Obrigado.
+[13/05/2026 13:09] Atendente: Encontrei aqui, o pedido está em rota de entrega.
 ```
+
+## Privacidade
+
+A extensão **não envia nada para nenhum servidor**. Tudo é processado localmente no seu navegador. Detalhes em [PRIVACY POLICY](https://maykesn.github.io/chat-clipboard-extension/privacy.html).
 
 ## Estrutura do projeto
 
