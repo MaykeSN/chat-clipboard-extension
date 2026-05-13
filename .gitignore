@@ -1,0 +1,18 @@
+# Pacotes gerados para distribuicao (zip da extensao)
+*.zip
+*.crx
+*.pem
+
+# OS cruft
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor stuff
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Claude Code (config local)
+.claude/

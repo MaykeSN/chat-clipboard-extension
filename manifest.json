@@ -1,0 +1,51 @@
+{
+  "manifest_version": 3,
+  "name": "Chat Clipboard",
+  "version": "1.0.0",
+  "description": "Copia o historico de mensagens do chat de atendimento (PureCloud + invenit.cloud) para o clipboard, ja formatado com data, papel e texto limpo.",
+  "author": "Mayke Nogueira",
+  "homepage_url": "https://github.com/MaykeSN/chat-clipboard-extension",
+
+  "permissions": [
+    "clipboardWrite",
+    "scripting",
+    "activeTab"
+  ],
+
+  "background": {
+    "service_worker": "background.js"
+  },
+
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content_script.js"],
+      "run_at": "document_idle",
+      "all_frames": true
+    }
+  ],
+
+  "commands": {
+    "copy-chat": {
+      "suggested_key": {
+        "default": "Ctrl+Shift+C"
+      },
+      "description": "Extrai e copia o chat atual para o clipboard"
+    }
+  },
+
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+
+  "action": {
+    "default_title": "Copiar chat para o clipboard",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    }
+  }
+}

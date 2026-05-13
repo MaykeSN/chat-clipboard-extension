@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Chat de Teste - Chat Clipboard</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+      background: #ecf0f1;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px;
+    }
+    h1 { color: #2c3e50; margin: 0 0 8px; }
+    .subtitle {
+      color: #7f8c8d; margin: 0 0 24px;
+      font-size: 14px; text-align: center; max-width: 640px;
+    }
+    kbd {
+      background: #fff; border: 1px solid #bdc3c7;
+      border-radius: 4px; padding: 1px 6px; font-size: 12px;
+    }
+
+    /* Estrutura espelha a plataforma Multilaser:
+       <main> > <section side="left|right"> > .message-card__content > .message-card__text */
+    main {
+      width: 100%;
+      max-width: 640px;
+      background: #fff;
+      border-radius: 12px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    section {
+      display: flex;
+      flex-direction: column;
+      margin: 6px 0;
+    }
+    section[side="left"]  { align-items: flex-start; }
+    section[side="right"] { align-items: flex-end; }
+
+    .message-card__content {
+      max-width: 78%;
+      padding: 10px 14px;
+      border-radius: 14px;
+    }
+    .message-card-left {
+      background: #ecf0f1; color: #2c3e50;
+      border-bottom-left-radius: 4px;
+    }
+    .message-card-right {
+      background: #3498db; color: #fff;
+      border-bottom-right-radius: 4px;
+    }
+
+    .message-card__text {
+      font-size: 14px; line-height: 1.4;
+      margin: 0; white-space: pre-line;
+    }
+    .message-card__date {
+      font-size: 11px; color: #95a5a6;
+      margin-top: 2px;
+    }
+    section[side="left"]  .message-card__date { margin-left: 4px; }
+    section[side="right"] .message-card__date { margin-right: 4px; }
+
+    .controls {
+      margin-top: 20px;
+      display: flex; gap: 8px;
+    }
+    .controls button {
+      padding: 8px 14px;
+      border: 1px solid #bdc3c7;
+      background: #fff;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 13px;
+    }
+    .controls button:hover { background: #f8f9fa; }
+  </style>
+</head>
+<body>
+  <h1>Chat de Teste</h1>
+  <p class="subtitle">
+    Estrutura espelha a plataforma real (Multilaser): <code>&lt;section side="left|right"&gt;</code>
+    com <code>.message-card__text</code> e <code>.message-card__date</code>.
+    Inclui propositalmente <code>&lt;b&gt;</code> literais e markdown
+    <code>*WhatsApp*</code> pra testar a limpeza.
+    Clique no botão flutuante ou <kbd>Ctrl+Shift+C</kbd>.
+  </p>
+
+  <div class="historic__container">
+  <main>
+    <section side="left">
+      <div class="message-card__content message-card-left">
+        <p class="message-card__text">Tudo bem?</p>
+      </div>
+      <small class="message-card__date">13 de mai. de 2026, 13:08</small>
+    </section>
+
+    <section side="left">
+      <div class="message-card__content message-card-left">
+        <p class="message-card__text">Bom dia</p>
+      </div>
+      <small class="message-card__date">13 de mai. de 2026, 13:08</small>
+    </section>
+
+    <section side="right">
+      <div class="message-card__content message-card-right">
+        <p class="message-card__text">Olá, que bom falar com você novamente! 👋
+
+Aqui é a *Emi*! A *assistente virtual* da Multilaser. 🤖</p>
+      </div>
+      <small class="message-card__date">13 de mai. de 2026, 13:08</small>
+    </section>
+
+    <section side="right">
+      <div class="message-card__content message-card-right">
+        <p class="message-card__text">&lt;b&gt;Sobre qual assunto você gostaria de falar?&lt;/b&gt;
+
+&lt;b&gt;Garantia:&lt;/b&gt; Preciso solicitar conserto, assistência técnica, acessórios ou acompanhar o status de uma solicitação de garantia.
+
+&lt;b&gt;E-commerce:&lt;/b&gt; Preciso de ajuda para realizar compras, registrar uma reclamação dentro dos 7 dias do recebimento, ou acompanhar o status de pedidos online.</p>
+      </div>
+      <small class="message-card__date">13 de mai. de 2026, 13:09</small>
+    </section>
+
+    <section side="left">
+      <div class="message-card__content message-card-left">
+        <p class="message-card__text">Garantia 🛠️</p>
+      </div>
+      <small class="message-card__date">13 de mai. de 2026, 13:09</small>
+    </section>
+
+    <section side="right">
+      <div class="message-card__content message-card-right">
+        <p class="message-card__text">📌 *Fernando, sobre qual assunto você precisa de ajuda?*
+_Toque no botão abaixo para escolher um assunto._ 👇</p>
+      </div>
+      <small class="message-card__date">13 de mai. de 2026, 13:10</small>
+    </section>
+
+    <section side="left">
+      <div class="message-card__content message-card-left">
+        <p class="message-card__text">Nb426</p>
+      </div>
+      <small class="message-card__date">13 de mai. de 2026, 13:11</small>
+    </section>
+
+    <section side="right">
+      <div class="message-card__content message-card-right">
+        <p class="message-card__text">Encontrei! 🙂
+
+Me *confirme*, o seu produto é esse?
+
+TABLET M8 WIFI 4/64GB CINZA</p>
+      </div>
+      <small class="message-card__date">13 de mai. de 2026, 13:12</small>
+    </section>
+
+    <section side="left">
+      <div class="message-card__content message-card-left">
+        <p class="message-card__text">Sim</p>
+      </div>
+      <small class="message-card__date">13 de mai. de 2026, 13:12</small>
+    </section>
+
+    <section side="right">
+      <div class="message-card__content message-card-right">
+        <p class="message-card__text">Te *transferi para a fila* de atendimento. 👩🏻‍💻 👨🏻‍💻</p>
+      </div>
+      <small class="message-card__date">13 de mai. de 2026, 13:15</small>
+    </section>
+  </main>
+  </div>
+
+  <div class="controls">
+    <button onclick="addLeft()">+ Mensagem cliente</button>
+    <button onclick="addRight()">+ Mensagem atendente</button>
+    <button onclick="clearChat()">Limpar</button>
+  </div>
+
+  <script>
+    const main = document.querySelector('main');
+
+    function nowFormatted() {
+      const months = ['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
+      const d = new Date();
+      const hh = String(d.getHours()).padStart(2,'0');
+      const mm = String(d.getMinutes()).padStart(2,'0');
+      return `${d.getDate()} de ${months[d.getMonth()]}. de ${d.getFullYear()}, ${hh}:${mm}`;
+    }
+
+    function addMessage(side, text) {
+      const section = document.createElement('section');
+      section.setAttribute('side', side);
+
+      const content = document.createElement('div');
+      content.className = `message-card__content message-card-${side}`;
+
+      const p = document.createElement('p');
+      p.className = 'message-card__text';
+      p.textContent = text;
+      content.appendChild(p);
+
+      const date = document.createElement('small');
+      date.className = 'message-card__date';
+      date.textContent = nowFormatted();
+
+      section.appendChild(content);
+      section.appendChild(date);
+      main.appendChild(section);
+    }
+
+    let counter = 1;
+    function addLeft()  { addMessage('left',  `Mensagem de teste do cliente nº ${counter++}.`); }
+    function addRight() { addMessage('right', `Resposta de teste do atendente nº ${counter++}.`); }
+    function clearChat() { main.innerHTML = ''; }
+  </script>
+</body>
+</html>
+</content>
