@@ -3,7 +3,7 @@
   "name": "Chat Clipboard",
   "version": "1.0.0",
   "description": "Copia o historico de mensagens do chat de atendimento (PureCloud + invenit.cloud) para o clipboard, ja formatado com data, papel e texto limpo.",
-  "author": "Mayke Nogueira",
+  "author": "Mayke de Souza Nogueira",
   "homepage_url": "https://github.com/MaykeSN/chat-clipboard-extension",
 
   "permissions": [
