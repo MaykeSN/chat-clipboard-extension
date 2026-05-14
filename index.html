@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Extensão de navegador que copia o histórico do chat de atendimento já formatado e pronto pra IA resumir. Para Microsoft Edge e Chrome.">
+  <title>Chat Clipboard — Copie o chat de atendimento com um clique</title>
+  <link rel="icon" type="image/png" href="icons/icon128.png">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --indigo: #6366f1;
+      --purple: #8b5cf6;
+      --gradient: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+      --text: #1a202c;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+      --bg-soft: #f8fafc;
+      --bg-card: #ffffff;
+      --success: #10b981;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+      color: var(--text);
+      background: var(--bg-card);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a { color: var(--indigo); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    .container {
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* ---- Navbar ---- */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border);
+      padding: 12px 0;
+    }
+    nav .container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      font-size: 17px;
+      color: var(--text);
+    }
+    .nav-brand img { width: 28px; height: 28px; }
+    .nav-links {
+      display: flex;
+      gap: 22px;
+      align-items: center;
+      font-size: 14px;
+    }
+    .nav-links a { color: var(--text-muted); font-weight: 500; }
+    .nav-links a:hover { color: var(--indigo); text-decoration: none; }
+
+    /* ---- Hero ---- */
+    .hero {
+      padding: 80px 0 100px;
+      text-align: center;
+      background:
+        radial-gradient(circle at 20% 30%, rgba(99,102,241,0.08), transparent 50%),
+        radial-gradient(circle at 80% 70%, rgba(139,92,246,0.08), transparent 50%);
+    }
+    .hero img.logo {
+      width: 110px;
+      height: 110px;
+      margin-bottom: 28px;
+      filter: drop-shadow(0 10px 24px rgba(99,102,241,0.30));
+    }
+    .hero h1 {
+      font-size: clamp(34px, 5vw, 52px);
+      font-weight: 800;
+      letter-spacing: -1px;
+      line-height: 1.1;
+      margin-bottom: 18px;
+    }
+    .hero h1 .grad {
+      background: var(--gradient);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .hero p.tagline {
+      font-size: clamp(16px, 1.8vw, 19px);
+      color: var(--text-muted);
+      max-width: 640px;
+      margin: 0 auto 36px;
+    }
+    .cta-row {
+      display: flex;
+      gap: 14px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 13px 26px;
+      border-radius: 999px;
+      font-size: 15px;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      transition: transform .15s ease, box-shadow .2s ease, filter .15s ease;
+      text-decoration: none;
+    }
+    .btn:hover { text-decoration: none; transform: translateY(-2px); }
+    .btn-primary {
+      background: var(--gradient);
+      color: #fff;
+      box-shadow: 0 6px 18px rgba(99,102,241,0.35);
+    }
+    .btn-primary:hover {
+      box-shadow: 0 10px 24px rgba(99,102,241,0.45);
+      filter: brightness(1.05);
+    }
+    .btn-secondary {
+      background: #fff;
+      color: var(--text);
+      border: 1.5px solid var(--border);
+    }
+    .btn-secondary:hover {
+      border-color: var(--indigo);
+      color: var(--indigo);
+    }
+    .compat {
+      margin-top: 22px;
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    /* ---- Section base ---- */
+    section.feature-section {
+      padding: 80px 0;
+      border-top: 1px solid var(--border);
+    }
+    section.feature-section.soft {
+      background: var(--bg-soft);
+    }
+    .section-title {
+      font-size: clamp(26px, 3vw, 34px);
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 14px;
+      letter-spacing: -0.5px;
+    }
+    .section-sub {
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 16px;
+      max-width: 600px;
+      margin: 0 auto 50px;
+    }
+
+    /* ---- Features grid ---- */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 22px;
+    }
+    .feature {
+      padding: 26px;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      background: #fff;
+      transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+    }
+    .feature:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 28px rgba(0,0,0,0.06);
+      border-color: rgba(99,102,241,0.3);
+    }
+    .feature-icon {
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--gradient);
+      border-radius: 10px;
+      color: #fff;
+      margin-bottom: 16px;
+    }
+    .feature h3 {
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .feature p {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.55;
+    }
+
+    /* ---- Steps (AI workflow) ---- */
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 22px;
+      counter-reset: step;
+    }
+    .step {
+      counter-increment: step;
+      position: relative;
+      padding: 32px 22px 22px;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+    }
+    .step::before {
+      content: counter(step);
+      position: absolute;
+      top: -18px;
+      left: 22px;
+      width: 36px;
+      height: 36px;
+      background: var(--gradient);
+      color: #fff;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 16px;
+      box-shadow: 0 4px 12px rgba(99,102,241,0.35);
+    }
+    .step h4 {
+      font-size: 15px;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+    .step p {
+      font-size: 13.5px;
+      color: var(--text-muted);
+      line-height: 1.55;
+    }
+
+    /* ---- Install ---- */
+    .install-box {
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 30px;
+      max-width: 720px;
+      margin: 0 auto;
+    }
+    .install-box ol {
+      padding-left: 24px;
+      font-size: 15px;
+    }
+    .install-box ol li {
+      margin: 10px 0;
+    }
+    .install-box code {
+      background: #f1f5f9;
+      padding: 2px 7px;
+      border-radius: 4px;
+      font-size: 13px;
+      color: var(--indigo);
+      font-family: "Consolas", "Courier New", monospace;
+    }
+    .install-cta {
+      text-align: center;
+      margin-top: 30px;
+    }
+
+    /* ---- Privacy banner ---- */
+    .privacy-card {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 30px;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-left: 4px solid var(--success);
+      border-radius: 12px;
+    }
+    .privacy-card h3 {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .privacy-card h3 svg {
+      color: var(--success);
+    }
+    .privacy-card p {
+      font-size: 14.5px;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+    .privacy-card a {
+      font-weight: 600;
+    }
+
+    /* ---- Footer ---- */
+    footer {
+      padding: 50px 0 40px;
+      border-top: 1px solid var(--border);
+      background: var(--bg-soft);
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+    footer .container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 14px;
+    }
+    footer .brand-foot {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 600;
+      color: var(--text);
+    }
+    footer .brand-foot img { width: 24px; height: 24px; }
+    footer .footer-links {
+      display: flex;
+      gap: 20px;
+    }
+
+    /* ---- Mobile ---- */
+    @media (max-width: 600px) {
+      .nav-links a:not(.btn) { display: none; }
+      .hero { padding: 50px 0 70px; }
+      section.feature-section { padding: 60px 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav>
+    <div class="container">
+      <a href="#" class="nav-brand">
+        <img src="icons/icon128.png" alt="">
+        Chat Clipboard
+      </a>
+      <div class="nav-links">
+        <a href="#funcionalidades">Funcionalidades</a>
+        <a href="#como-funciona">Como funciona</a>
+        <a href="#instalar">Instalar</a>
+        <a href="https://github.com/MaykeSN/chat-clipboard-extension" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <header class="hero">
+    <div class="container">
+      <img src="store-assets/logo-300.png" alt="Chat Clipboard" class="logo">
+      <h1>Copie o chat de atendimento <br><span class="grad">com um clique</span></h1>
+      <p class="tagline">
+        Extensão pro Microsoft Edge e Google Chrome que extrai a conversa inteira do
+        chat de atendimento, formata bonitinho com data/hora e ainda deixa pronto pra
+        você colar numa IA pedir o resumo.
+      </p>
+      <div class="cta-row">
+        <a href="https://github.com/MaykeSN/chat-clipboard-extension/releases/latest" class="btn btn-primary" target="_blank" rel="noopener">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M12 3v13m0 0l5-5m-5 5l-5-5M5 21h14" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          Baixar agora
+        </a>
+        <a href="#instalar" class="btn btn-secondary">Como instalar</a>
+      </div>
+      <p class="compat">Compatível com Microsoft Edge e Google Chrome &middot; Grátis &middot; Código aberto</p>
+    </div>
+  </header>
+
+  <!-- FUNCIONALIDADES -->
+  <section class="feature-section" id="funcionalidades">
+    <div class="container">
+      <h2 class="section-title">O que ela faz</h2>
+      <p class="section-sub">Tudo o que você precisa pra parar de copiar mensagem por mensagem do atendimento.</p>
+
+      <div class="features-grid">
+
+        <div class="feature">
+          <div class="feature-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M4 5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-7l-4 4v-4H6a2 2 0 0 1-2-2V5z" fill="currentColor"/>
+            </svg>
+          </div>
+          <h3>Botão flutuante no chat</h3>
+          <p>Aparece direto no painel do atendimento. Um clique copia a conversa toda.</p>
+        </div>
+
+        <div class="feature">
+          <div class="feature-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M9 12.5l2.5 2.5L16 9M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <h3>Atalho de teclado</h3>
+          <p>Ctrl+Shift+C copia sem tirar a mão do teclado. Personalizável.</p>
+        </div>
+
+        <div class="feature">
+          <div class="feature-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M12 4v16m8-8H4" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <h3>Prompt pra IA</h3>
+          <p>Salve um prompt customizado que é colado junto. Cole na ChatGPT/Claude e receba o resumo.</p>
+        </div>
+
+        <div class="feature">
+          <div class="feature-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M19 4H5a2 2 0 00-2 2v12a2 2 0 002 2h14a2 2 0 002-2V6a2 2 0 00-2-2zM3 10h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              <path d="M8 14h.01M12 14h.01M16 14h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <h3>Data e hora padronizadas</h3>
+          <p>Cada mensagem fica com prefixo <code>[13/05/2026 13:08]</code> — rastreabilidade garantida.</p>
+        </div>
+
+        <div class="feature">
+          <div class="feature-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M3 6h18M6 12h12M10 18h4" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>
+            </svg>
+          </div>
+          <h3>Texto limpo</h3>
+          <p>Remove tags HTML e markdown do WhatsApp que o bot deixa pra trás. Resultado pronto pra usar.</p>
+        </div>
+
+        <div class="feature">
+          <div class="feature-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M12 2L4 6v6c0 5 3.5 9.5 8 10 4.5-.5 8-5 8-10V6l-8-4z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+            </svg>
+          </div>
+          <h3>100% local</h3>
+          <p>Tudo acontece no seu navegador. Nenhuma mensagem é enviada pra servidor algum.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- COMO FUNCIONA -->
+  <section class="feature-section soft" id="como-funciona">
+    <div class="container">
+      <h2 class="section-title">Resumir atendimento com IA em 4 passos</h2>
+      <p class="section-sub">Quando você assume um atendimento herdado e precisa entender o contexto rápido.</p>
+
+      <div class="steps">
+
+        <div class="step">
+          <h4>Abre o popup</h4>
+          <p>Clica no ícone da extensão na barra. Ajusta o prompt se quiser (já vem com um padrão pronto).</p>
+        </div>
+
+        <div class="step">
+          <h4>Copia o chat</h4>
+          <p>Clica em "Copiar chat agora" ou usa o botão flutuante. O texto vai pra área de transferência junto com o prompt.</p>
+        </div>
+
+        <div class="step">
+          <h4>Cola na IA</h4>
+          <p>Ctrl+V na ChatGPT, Claude, Gemini ou no Copilot. Você escolhe onde colar.</p>
+        </div>
+
+        <div class="step">
+          <h4>Recebe o resumo</h4>
+          <p>A IA devolve um resumo curto: cliente, produto, problema, ações já feitas e próximo passo.</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- INSTALAR -->
+  <section class="feature-section" id="instalar">
+    <div class="container">
+      <h2 class="section-title">Como instalar</h2>
+      <p class="section-sub">3 minutos. Não precisa ter conta de loja de extensões.</p>
+
+      <div class="install-box">
+        <ol>
+          <li><a href="https://github.com/MaykeSN/chat-clipboard-extension/releases/latest" target="_blank" rel="noopener">Baixe o <code>.zip</code> da última versão</a> e extraia em uma pasta sua.</li>
+          <li>Abre o Edge e vai em <code>edge://extensions/</code> (ou <code>chrome://extensions/</code>).</li>
+          <li>Ative o <strong>Modo do desenvolvedor</strong> (toggle no canto da página).</li>
+          <li>Clique em <strong>Carregar expandida</strong> e selecione a pasta que você extraiu.</li>
+          <li>Fixe o ícone na barra de extensões (alfinete) pra acesso rápido.</li>
+        </ol>
+        <div class="install-cta">
+          <a href="https://github.com/MaykeSN/chat-clipboard-extension/releases/latest" class="btn btn-primary" target="_blank" rel="noopener">
+            Baixar última versão
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRIVACIDADE -->
+  <section class="feature-section soft">
+    <div class="container">
+      <div class="privacy-card">
+        <h3>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M12 2L4 6v6c0 5 3.5 9.5 8 10 4.5-.5 8-5 8-10V6l-8-4z" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/>
+            <path d="M9 12l2 2 4-4" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          Seus dados ficam com você
+        </h3>
+        <p>A extensão <strong>não envia nada pra servidor algum</strong>. Não tem analytics, não tem tracking, não tem coleta de dados.</p>
+        <p>Tudo é processado localmente no seu navegador. Suas preferências (prompt, toggles) ficam salvas só na sua conta do navegador.</p>
+        <p><a href="privacy.html">Política de privacidade completa &rarr;</a></p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="container">
+      <div class="brand-foot">
+        <img src="icons/icon48.png" alt="">
+        Chat Clipboard
+      </div>
+      <div class="footer-links">
+        <a href="https://github.com/MaykeSN/chat-clipboard-extension" target="_blank" rel="noopener">GitHub</a>
+        <a href="privacy.html">Privacidade</a>
+        <a href="https://github.com/MaykeSN/chat-clipboard-extension/blob/main/LICENSE" target="_blank" rel="noopener">Licença MIT</a>
+        <a href="https://github.com/MaykeSN/chat-clipboard-extension/releases" target="_blank" rel="noopener">Versões</a>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>
