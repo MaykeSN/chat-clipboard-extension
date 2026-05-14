@@ -47,12 +47,17 @@ jobs:
             icons/ \
             LICENSE \
             README.md
+          # Copia com nome estavel para permitir URL de download fixa:
+          # releases/latest/download/chat-clipboard.zip sempre baixa a ultima.
+          cp "dist/chat-clipboard-v${{ steps.ver.outputs.version }}.zip" "dist/chat-clipboard.zip"
           ls -lh dist/
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          files: dist/chat-clipboard-v${{ steps.ver.outputs.version }}.zip
+          files: |
+            dist/chat-clipboard-v${{ steps.ver.outputs.version }}.zip
+            dist/chat-clipboard.zip
           name: v${{ steps.ver.outputs.version }}
           generate_release_notes: true
           body: |

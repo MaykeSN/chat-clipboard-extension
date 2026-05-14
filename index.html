@@ -380,15 +380,18 @@
         você colar numa IA pedir o resumo.
       </p>
       <div class="cta-row">
-        <a href="https://github.com/MaykeSN/chat-clipboard-extension/releases/latest" class="btn btn-primary" target="_blank" rel="noopener">
+        <a href="https://github.com/MaykeSN/chat-clipboard-extension/releases/latest" class="btn btn-primary" data-download-cta>
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true">
             <path d="M12 3v13m0 0l5-5m-5 5l-5-5M5 21h14" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
-          Baixar agora
+          <span>Baixar agora</span>
         </a>
         <a href="#instalar" class="btn btn-secondary">Como instalar</a>
       </div>
-      <p class="compat">Compatível com Microsoft Edge e Google Chrome &middot; Grátis &middot; Código aberto</p>
+      <p class="compat">
+        Compatível com Microsoft Edge e Google Chrome &middot; Grátis &middot; Código aberto
+        <span id="latest-version-badge" hidden> &middot; <strong></strong></span>
+      </p>
     </div>
   </header>
 
@@ -512,8 +515,8 @@
           <li>Fixe o ícone na barra de extensões (alfinete) pra acesso rápido.</li>
         </ol>
         <div class="install-cta">
-          <a href="https://github.com/MaykeSN/chat-clipboard-extension/releases/latest" class="btn btn-primary" target="_blank" rel="noopener">
-            Baixar última versão
+          <a href="https://github.com/MaykeSN/chat-clipboard-extension/releases/latest" class="btn btn-primary" data-download-cta>
+            <span>Baixar última versão</span>
           </a>
         </div>
       </div>
@@ -553,6 +556,40 @@
       </div>
     </div>
   </footer>
+
+  <script>
+    // Consulta a API do GitHub para descobrir a URL do .zip da ultima release.
+    // Atualiza todos os botoes com [data-download-cta] para apontar direto
+    // pro arquivo, fazendo o download comecar na hora do clique.
+    // Se a chamada falhar (ex: offline, rate-limit), o href original
+    // (releases/latest) continua valendo como fallback - o usuario chega
+    // na pagina do release e baixa de la, mesmo cenario anterior.
+    (async () => {
+      try {
+        const res = await fetch('https://api.github.com/repos/MaykeSN/chat-clipboard-extension/releases/latest', {
+          headers: { 'Accept': 'application/vnd.github+json' },
+        });
+        if (!res.ok) return;
+        const data = await res.json();
+        const zip = (data.assets || []).find(a => a.name.toLowerCase().endsWith('.zip'));
+        if (!zip) return;
+
+        document.querySelectorAll('a[data-download-cta]').forEach(el => {
+          el.href = zip.browser_download_url;
+          el.setAttribute('download', zip.name); // dica para o browser baixar
+        });
+
+        // Mostra o numero da versao discreto no rodape do hero.
+        const badge = document.getElementById('latest-version-badge');
+        if (badge && data.tag_name) {
+          badge.querySelector('strong').textContent = data.tag_name;
+          badge.hidden = false;
+        }
+      } catch (err) {
+        // Silencio - fallback (link estatico para a pagina de releases) ja existe.
+      }
+    })();
+  </script>
 
 </body>
 </html>
