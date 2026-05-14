@@ -1,0 +1,69 @@
+name: Build and Release
+
+# Dispara quando voce empurra uma tag no formato vX.Y.Z (ex: v1.0.0, v1.2.3).
+# Para publicar uma nova versao:
+#   1. Atualize a versao em manifest.json (ex: "1.1.0")
+#   2. git commit + push
+#   3. git tag v1.1.0
+#   4. git push origin v1.1.0
+# O workflow vai empacotar o .zip e criar um Release no GitHub automaticamente.
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Extract version from tag
+        id: ver
+        run: echo "version=${GITHUB_REF#refs/tags/v}" >> "$GITHUB_OUTPUT"
+
+      - name: Sync manifest version with tag
+        run: |
+          jq --arg v "${{ steps.ver.outputs.version }}" '.version = $v' manifest.json > manifest.tmp
+          mv manifest.tmp manifest.json
+          echo "manifest.json updated to version ${{ steps.ver.outputs.version }}"
+
+      - name: Package extension as .zip
+        run: |
+          mkdir -p dist
+          zip -r "dist/chat-clipboard-v${{ steps.ver.outputs.version }}.zip" \
+            manifest.json \
+            background.js \
+            content_script.js \
+            defaults.js \
+            popup.html \
+            popup.js \
+            popup.css \
+            icons/ \
+            LICENSE \
+            README.md
+          ls -lh dist/
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist/chat-clipboard-v${{ steps.ver.outputs.version }}.zip
+          name: v${{ steps.ver.outputs.version }}
+          generate_release_notes: true
+          body: |
+            ## Download
+
+            Baixe `chat-clipboard-v${{ steps.ver.outputs.version }}.zip` abaixo e siga as [instrucoes de instalacao](https://github.com/MaykeSN/chat-clipboard-extension#como-instalar-modo-desenvolvedor).
+
+            ## Privacidade
+
+            A extensao nao envia dados para servidor algum. Tudo e processado localmente. [Politica de privacidade](https://maykesn.github.io/chat-clipboard-extension/privacy.html).
+
+            ---
+
+            ### Notas auto-geradas (commits desta versao):

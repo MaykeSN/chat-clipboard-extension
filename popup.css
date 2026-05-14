@@ -1,0 +1,185 @@
+/* =========================================================================
+   popup.css - estilos do popup de configuracoes
+   Identidade visual: gradiente indigo -> roxo (igual ao botao flutuante)
+   ========================================================================= */
+
+* { box-sizing: border-box; }
+
+body {
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  margin: 0;
+  width: 380px;
+  color: #1a202c;
+  background: #fff;
+  font-size: 13px;
+}
+
+/* ---- Header ------------------------------------------------------------ */
+header {
+  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+  color: #fff;
+  padding: 14px 18px;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+header h1 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+}
+header .version {
+  font-size: 11px;
+  opacity: 0.75;
+}
+
+/* ---- Sections ---------------------------------------------------------- */
+main { padding: 16px; }
+
+section { margin-bottom: 18px; }
+section:last-child { margin-bottom: 0; }
+
+section h2 {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #64748b;
+  margin: 0 0 8px;
+  font-weight: 600;
+}
+
+.hint {
+  margin: 6px 0;
+  font-size: 11px;
+  color: #94a3b8;
+  line-height: 1.4;
+}
+
+kbd {
+  background: #f1f5f9;
+  border: 1px solid #cbd5e1;
+  border-radius: 3px;
+  padding: 0 4px;
+  font-size: 10px;
+  font-family: inherit;
+}
+
+/* ---- Primary action button -------------------------------------------- */
+button.primary {
+  width: 100%;
+  padding: 11px 16px;
+  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: transform 0.1s ease, box-shadow 0.2s ease, filter 0.15s ease;
+  box-shadow: 0 3px 10px rgba(99,102,241,0.30);
+}
+button.primary:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(99,102,241,0.40);
+  filter: brightness(1.05);
+}
+button.primary:active {
+  transform: translateY(0);
+}
+
+/* ---- Toggles ---------------------------------------------------------- */
+label.toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 0;
+  cursor: pointer;
+  font-size: 13px;
+  user-select: none;
+}
+label.toggle input[type="checkbox"] {
+  width: 16px;
+  height: 16px;
+  accent-color: #6366f1;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+label.toggle span { line-height: 1.3; }
+
+/* ---- Textarea --------------------------------------------------------- */
+textarea {
+  display: block;
+  width: 100%;
+  margin-top: 4px;
+  padding: 9px 11px;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  font-family: "Consolas", "Courier New", monospace;
+  font-size: 11px;
+  line-height: 1.45;
+  resize: vertical;
+  min-height: 140px;
+  max-height: 300px;
+  color: #1e293b;
+  background: #fafafa;
+}
+textarea:focus {
+  outline: none;
+  border-color: #6366f1;
+  box-shadow: 0 0 0 3px rgba(99,102,241,0.15);
+  background: #fff;
+}
+
+.prompt-actions {
+  margin-top: 8px;
+  display: flex;
+  justify-content: flex-end;
+}
+
+button.secondary {
+  padding: 6px 12px;
+  background: #f1f5f9;
+  border: 1px solid #cbd5e1;
+  border-radius: 5px;
+  font-size: 11px;
+  cursor: pointer;
+  color: #475569;
+  font-weight: 500;
+}
+button.secondary:hover {
+  background: #e2e8f0;
+  color: #1e293b;
+}
+
+/* ---- Footer ----------------------------------------------------------- */
+footer {
+  border-top: 1px solid #e2e8f0;
+  padding: 8px 16px;
+  background: #f8fafc;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 11px;
+}
+
+#status {
+  color: #94a3b8;
+  transition: opacity 0.2s ease, color 0.2s ease;
+  opacity: 0;
+}
+#status.visible {
+  opacity: 1;
+  color: #10b981;
+  font-weight: 500;
+}
+
+footer a {
+  color: #6366f1;
+  text-decoration: none;
+}
+footer a:hover { text-decoration: underline; }

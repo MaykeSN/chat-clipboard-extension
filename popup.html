@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Chat Clipboard</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+
+  <header>
+    <h1>Chat Clipboard</h1>
+    <span class="version">v1.0.0</span>
+  </header>
+
+  <main>
+
+    <section class="action">
+      <button id="copy-now" class="primary" type="button">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M4 5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-7l-4 4v-4H6a2 2 0 0 1-2-2V5z" fill="currentColor"/>
+        </svg>
+        Copiar chat agora
+      </button>
+      <p class="hint">Tambem funciona pelo botao flutuante ou <kbd>Ctrl+Shift+C</kbd></p>
+    </section>
+
+    <section class="settings">
+      <h2>Configuracoes</h2>
+
+      <label class="toggle">
+        <input type="checkbox" id="include-prompt">
+        <span>Incluir prompt no inicio (pra colar em IA)</span>
+      </label>
+
+      <label class="toggle">
+        <input type="checkbox" id="show-dates">
+        <span>Mostrar data/hora em cada mensagem</span>
+      </label>
+    </section>
+
+    <section class="prompt-section">
+      <h2>Prompt padrao</h2>
+      <p class="hint">Esse texto vai no topo do que voce copia. Cola na ChatGPT/Claude/Gemini pra pedir resumo.</p>
+      <textarea id="custom-prompt" rows="10" spellcheck="false"></textarea>
+      <div class="prompt-actions">
+        <button id="reset-prompt" class="secondary" type="button">Restaurar padrao</button>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <span id="status"></span>
+    <a href="https://github.com/MaykeSN/chat-clipboard-extension" target="_blank" rel="noopener">GitHub</a>
+  </footer>
+
+  <script src="defaults.js"></script>
+  <script src="popup.js"></script>
+</body>
+</html>

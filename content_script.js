@@ -185,18 +185,40 @@ function extractMessages() {
 
 
 /**
- * Formata o array de mensagens. Inclui o prefixo "[data hora]" quando
- * disponivel; caso contrario, apenas "Papel: texto".
+ * Formata o array de mensagens. Respeita as settings do usuario:
+ *  - showDates: liga/desliga o prefixo [data hora]
+ *  - includePrompt + customPrompt: opcionalmente adiciona o prompt no inicio
  *
- * Exemplo:
+ * Exemplo (com showDates ligado):
  *   [13/05/2026 13:08] Cliente: Bom dia
  *   [13/05/2026 13:08] Atendente: Ola, em que posso ajudar?
  */
-function formatMessages(messages) {
-  return messages.map((m) => {
-    const prefix = m.date ? `[${m.date}] ` : '';
+function formatMessages(messages, settings) {
+  const opts = settings || DEFAULT_SETTINGS;
+  const lines = messages.map((m) => {
+    const prefix = (opts.showDates && m.date) ? `[${m.date}] ` : '';
     return `${prefix}${m.role}: ${m.text}`;
   }).join('\n');
+
+  if (opts.includePrompt && opts.customPrompt && opts.customPrompt.trim()) {
+    return opts.customPrompt + lines;
+  }
+  return lines;
+}
+
+
+/**
+ * Le as configuracoes do chrome.storage.sync.
+ * Fallback gracioso para DEFAULT_SETTINGS se a API nao estiver disponivel
+ * (ex: testando em file:// sem extension context).
+ */
+async function loadSettings() {
+  if (!chrome || !chrome.storage || !chrome.storage.sync) {
+    return DEFAULT_SETTINGS;
+  }
+  return new Promise((resolve) => {
+    chrome.storage.sync.get(DEFAULT_SETTINGS, (items) => resolve(items));
+  });
 }
 
 
@@ -260,7 +282,8 @@ async function handleCopyAction() {
     return;
   }
 
-  const formatted = formatMessages(messages);
+  const settings = await loadSettings();
+  const formatted = formatMessages(messages, settings);
   const ok = await copyToClipboard(formatted);
 
   if (ok) {

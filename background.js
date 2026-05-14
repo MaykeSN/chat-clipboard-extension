@@ -43,8 +43,6 @@ chrome.commands.onCommand.addListener((command) => {
   }
 });
 
-
-// Clique no icone da extensao tambem dispara a copia (atalho extra util).
-chrome.action.onClicked.addListener(() => {
-  triggerCopyOnActiveTab();
-});
+// Obs: o clique no icone da extensao agora abre a popup.html (definida em
+// manifest.action.default_popup). A popup tem um botao "Copiar agora" que
+// dispara a mesma acao via chrome.scripting.executeScript.

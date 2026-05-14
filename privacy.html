@@ -42,7 +42,7 @@
 <body>
 
   <h1>Política de Privacidade — Chat Clipboard</h1>
-  <p class="meta">Última atualização: 13 de maio de 2026</p>
+  <p class="meta">Última atualização: 14 de maio de 2026</p>
 
   <div class="highlight">
     <strong>Resumo em uma frase:</strong> A extensão Chat Clipboard <strong>não coleta, não armazena, não transmite e não compartilha</strong> qualquer dado pessoal ou conteúdo de chat. Todo o processamento ocorre exclusivamente no seu navegador.
@@ -72,16 +72,30 @@
 
   <h2>Permissões utilizadas</h2>
   <ul>
-    <li><code>clipboardWrite</code> — necessária para gravar o texto formatado na área de transferência.</li>
-    <li><code>scripting</code> — necessária para executar o código de extração em todos os frames da página, incluindo o iframe que contém o chat.</li>
-    <li><code>activeTab</code> — necessária para acessar a aba ativa apenas quando o usuário aciona a extensão (clique no botão ou atalho de teclado).</li>
+    <li><code>clipboardWrite</code> — gravar o texto formatado na área de transferência.</li>
+    <li><code>scripting</code> — executar o código de extração em todos os frames da página, incluindo o iframe que contém o chat.</li>
+    <li><code>activeTab</code> — acessar a aba ativa apenas quando o usuário aciona a extensão (clique no botão ou atalho de teclado).</li>
+    <li><code>storage</code> — salvar suas preferências locais (prompt customizado e toggles do popup).</li>
   </ul>
 
   <h2>Cookies e armazenamento</h2>
-  <p>A extensão não utiliza cookies, <code>localStorage</code>, <code>IndexedDB</code> ou qualquer outro mecanismo de armazenamento persistente.</p>
+  <p>A extensão não utiliza cookies, <code>localStorage</code> ou <code>IndexedDB</code>.</p>
+  <p>
+    A extensão <strong>utiliza</strong> o <code>chrome.storage.sync</code> apenas para salvar suas próprias preferências locais:
+  </p>
+  <ul>
+    <li>Texto do prompt customizado que você editou</li>
+    <li>Estado dos toggles (incluir prompt, mostrar data/hora)</li>
+  </ul>
+  <p>
+    Esses dados ficam armazenados no seu navegador e são sincronizados entre seus dispositivos <strong>via sua conta do Microsoft Edge / Google Chrome</strong> — esse sync é gerenciado inteiramente pelo navegador, não pela extensão. <strong>Nenhum dado de chat é salvo</strong>, apenas suas preferências de uso.
+  </p>
 
   <h2>Compartilhamento com terceiros</h2>
   <p>Não há compartilhamento com terceiros. A extensão é completamente offline em termos de comunicação externa.</p>
+  <p>
+    <strong>Importante:</strong> a extensão <strong>não chama nenhuma API de IA automaticamente</strong>. Quando você habilita o "prompt no início", o texto do prompt é apenas <em>colado junto com o chat na sua área de transferência</em>. Você decide manualmente se e onde colar esse conteúdo (ChatGPT, Claude, Gemini, etc.). A extensão não tem conhecimento disso.
+  </p>
 
   <h2>Alterações nesta política</h2>
   <p>Eventuais alterações serão publicadas nesta mesma página, com data de atualização atualizada no topo do documento.</p>
@@ -92,7 +106,7 @@
   <hr class="divider">
 
   <h1>Privacy Policy — Chat Clipboard (English)</h1>
-  <p class="meta">Last updated: May 13, 2026</p>
+  <p class="meta">Last updated: May 14, 2026</p>
 
   <div class="highlight">
     <strong>One-sentence summary:</strong> The Chat Clipboard extension <strong>does not collect, store, transmit, or share</strong> any personal data or chat content. All processing happens entirely within your browser.
@@ -121,16 +135,30 @@
 
   <h2>Permissions used</h2>
   <ul>
-    <li><code>clipboardWrite</code> — to write the formatted text to the clipboard.</li>
-    <li><code>scripting</code> — to run the extraction code in all frames of the page, including the iframe that holds the chat.</li>
-    <li><code>activeTab</code> — to access the active tab only when the user invokes the extension (button click or keyboard shortcut).</li>
+    <li><code>clipboardWrite</code> — write the formatted text to the clipboard.</li>
+    <li><code>scripting</code> — run the extraction code in all frames of the page, including the iframe that holds the chat.</li>
+    <li><code>activeTab</code> — access the active tab only when the user invokes the extension (button click or keyboard shortcut).</li>
+    <li><code>storage</code> — persist your local preferences (custom prompt and popup toggles).</li>
   </ul>
 
   <h2>Cookies and storage</h2>
-  <p>The extension does not use cookies, <code>localStorage</code>, <code>IndexedDB</code>, or any other persistent storage.</p>
+  <p>The extension does not use cookies, <code>localStorage</code>, or <code>IndexedDB</code>.</p>
+  <p>
+    The extension <strong>does use</strong> <code>chrome.storage.sync</code> solely to persist your own local preferences:
+  </p>
+  <ul>
+    <li>The custom prompt text you edited</li>
+    <li>Toggle states (include prompt, show date/time)</li>
+  </ul>
+  <p>
+    This data is stored in your browser and synced across your devices <strong>via your Microsoft Edge / Google Chrome account</strong> — this sync is managed entirely by the browser, not by the extension. <strong>No chat content is stored</strong>, only your usage preferences.
+  </p>
 
   <h2>Third parties</h2>
   <p>No third parties are involved. The extension is fully offline in terms of external communication.</p>
+  <p>
+    <strong>Important:</strong> the extension <strong>does not call any AI API automatically</strong>. When you enable the "prompt at start" option, the prompt text is merely <em>copied alongside the chat into your clipboard</em>. You manually decide whether and where to paste that content (ChatGPT, Claude, Gemini, etc.). The extension has no awareness of this.
+  </p>
 
   <h2>Changes to this policy</h2>
   <p>Any changes will be posted on this page, with the "Last updated" date at the top kept current.</p>

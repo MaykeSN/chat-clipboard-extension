@@ -9,7 +9,8 @@
   "permissions": [
     "clipboardWrite",
     "scripting",
-    "activeTab"
+    "activeTab",
+    "storage"
   ],
 
   "background": {
@@ -19,7 +20,7 @@
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
-      "js": ["content_script.js"],
+      "js": ["defaults.js", "content_script.js"],
       "run_at": "document_idle",
       "all_frames": true
     }
@@ -41,7 +42,8 @@
   },
 
   "action": {
-    "default_title": "Copiar chat para o clipboard",
+    "default_title": "Chat Clipboard - configuracoes e copia",
+    "default_popup": "popup.html",
     "default_icon": {
       "16": "icons/icon16.png",
       "48": "icons/icon48.png",
