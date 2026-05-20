@@ -423,9 +423,14 @@ function injectFloatingButton() {
 // Com all_frames=true no manifest, o content script roda em TODOS os iframes
 // da pagina (telemetria, ads, painel principal, painel do chat...). So queremos
 // injetar o botao no frame que de fato tem as mensagens.
+//
+// IMPORTANTE: a checagem deve ser sobre as MENSAGENS reais (section[side=...]),
+// nao sobre o container (que pode ser ".historic__container, main" - e <main>
+// existe em praticamente toda pagina web, inclusive na PureCloud que envolve
+// o iframe do chat. Checar pelo container causava 2 botoes flutuantes,
+// um em cada frame).
 function hasChatInDOM() {
   return !!(
-    (SELECTORS.chatContainer && document.querySelector(SELECTORS.chatContainer)) ||
     document.querySelector(SELECTORS.customerMessage) ||
     document.querySelector(SELECTORS.agentMessage)
   );
