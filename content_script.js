@@ -20,12 +20,13 @@
 // =============================================================================
 const SELECTORS = {
   // Container que envolve todas as mensagens do chat.
-  // Usado como ponto de partida para a busca - se ficar vazio, o script
-  // procura no document inteiro.
-  // Na plataforma Multilaser, o painel do chat tem a classe BEM
-  // ".historic__container" (estavel, nao muda com rebrands). Evitamos o
-  // seletor "main" porque a pagina tem mais de um <main> (lista + chat).
-  chatContainer: '.historic__container',
+  // Aceita uma lista separada por vírgula - usa o primeiro que existir no DOM.
+  // Cobertura observada na plataforma Multilaser (invenit.cloud):
+  //   - ".historic__container" — layout do Edge (com header completo).
+  //   - "main"                  — layout do Chrome (apenas <main> direto).
+  // Se nenhum match, o script faz fallback para o document inteiro (lento
+  // mas funcional). Sempre pelo menos um dos dois existe no painel do chat.
+  chatContainer: '.historic__container, main',
 
   // Mensagem enviada pelo CLIENTE (quem esta sendo atendido).
   // Na plataforma Multilaser: <section side="left"> = mensagens entrando.
